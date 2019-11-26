@@ -1,20 +1,24 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include<unistd.h>
+// #include<unistd.h>
 #include<string.h>
 
-void split(char ** dest, int len, char * src, char * delim) {
-    for (int i = 0; i < len; i++) {
-        dest[i] = strsep(&src, delim);
-    }
+char * DELIMITER = " ";
+
+char ** parse_args(char * line) {
+    char ** argv = calloc(sizeof(char *), 6);
+    int i = 0;
+    while ((argv[i++] = strsep(&line, DELIMITER)) != NULL) {}
+    return argv;
 }
 
 
 int main() {
-    char * argv[3];
-    char cli[] = "ls -a -l";
-    split(argv, sizeof(argv), cli, " ");
-    for (int i = 0; i < 3; i++) {
-        printf("%s\n", argv[i]);
+    char line[] = "ls -a -l -f -n";
+    char ** argv = parse_args(line);
+    int i = 0;
+    while(argv[i] != NULL) {
+        printf("token: \"%s\"\n", argv[i++]);
     }
+    free(argv);
 }
